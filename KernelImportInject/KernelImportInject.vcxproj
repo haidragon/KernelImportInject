@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="i386|Win32">
+      <Configuration>i386</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="amd64|Win32">
+      <Configuration>amd64</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{4EE67C57-BE79-4CD7-B3B0-94AECE62DB41}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>"KernelImportInject"</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='i386|Win32'">
+    <TargetExt>.sys</TargetExt>
+    <GenerateManifest>false</GenerateManifest>
+    <ExecutablePath>$(WLHBASE)\bin\x86\x86;$(WLHBASE)\bin\x86</ExecutablePath>
+    <IncludePath>$(WLHBASE)\inc\api;$(WLHBASE)\inc\crt;$(WLHBASE)\inc\ddk;$(WLHBASE)\inc\wdf;$(WLHBASE)\inc\wdf\kmdf\1.9;$(WLHBASE)\inc</IncludePath>
+    <ReferencePath />
+    <LibraryPath>$(WLHBASE)\lib\win7\i386</LibraryPath>
+    <SourcePath />
+    <ExcludePath />
+    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
+    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='amd64|Win32'">
+    <TargetExt>.sys</TargetExt>
+    <GenerateManifest>false</GenerateManifest>
+    <ExecutablePath>$(WLHBASE)\bin\x86\amd64;$(WLHBASE)\bin\x86</ExecutablePath>
+    <IncludePath>$(WLHBASE)\inc\api;$(WLHBASE)\inc\crt;$(WLHBASE)\inc\ddk;$(WLHBASE)\inc\wdf;$(WLHBASE)\inc\wdf\kmdf\1.9;$(WLHBASE)\inc</IncludePath>
+    <ReferencePath />
+    <LibraryPath>$(WLHBASE)\lib\win7\amd64</LibraryPath>
+    <SourcePath />
+    <ExcludePath />
+    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
+    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='i386|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>_X86_;DBG=1</PreprocessorDefinitions>
+      <ExceptionHandling>false</ExceptionHandling>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <CallingConvention>StdCall</CallingConvention>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>ntoskrnl.lib;hal.lib;wdm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Link>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <SubSystem>Native</SubSystem>
+      <Driver>Driver</Driver>
+      <EntryPointSymbol>DriverEntry</EntryPointSymbol>
+      <SetChecksum>true</SetChecksum>
+      <BaseAddress>0x10000</BaseAddress>
+      <RandomizedBaseAddress>
+      </RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+    </Link>
+    <PreBuildEvent>
+      <Command>BuildDrv.bat amd64 win7</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>BuildDrv.bat x86 win7</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='amd64|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>_AMD64_;DBG=1</PreprocessorDefinitions>
+      <ExceptionHandling>false</ExceptionHandling>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <CallingConvention>FastCall</CallingConvention>
+      <CompileAs>CompileAsC</CompileAs>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <Optimization>Disabled</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>ntoskrnl.lib;hal.lib;wdm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Link>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <SubSystem>Native</SubSystem>
+      <Driver>Driver</Driver>
+      <EntryPointSymbol>DriverEntry</EntryPointSymbol>
+      <SetChecksum>true</SetChecksum>
+      <BaseAddress>0x10000</BaseAddress>
+      <RandomizedBaseAddress>
+      </RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <PreBuildEvent>
+      <Command>BuildDrv.bat x86 win7</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>BuildDrv.bat amd64 win7</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include=".\KernelImportInject.h" />
+    <ClCompile Include="IMTInject.c" />
+    <ClCompile Include="KernelImportInject.c" />
+    <ClCompile Include="public.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="headers.h" />
+    <ClInclude Include="IMTInject.h" />
+    <ClInclude Include="public.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

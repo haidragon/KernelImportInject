@@ -1,0 +1,11 @@
+TARGETNAME=KernelImportInject
+#TARGETPATH=$(BASEDIR)\lib
+TARGETPATH=obj
+TARGETTYPE=DRIVER
+
+INCLUDES=.\
+
+SOURCES=KernelImportInject.c \
+        public.c             \
+		IMTInject.c          \
+
